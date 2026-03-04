@@ -55,15 +55,31 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 
 | Section | File | Description |
 |---|---|---|
-| 🔐 Authentication | [docs/authentication.md](docs/authentication.md) | OAuth 2.0, lấy token, headers bắt buộc |
-| 📦 Categories | [docs/categories.md](docs/categories.md) | Nhóm hàng hóa (CRUD) |
-| 🛍️ Products | [docs/products.md](docs/products.md) | Hàng hóa, tồn kho, thuộc tính (CRUD) |
-| 📋 Orders | [docs/orders.md](docs/orders.md) | Đặt hàng (CRUD) |
-| 🧾 Invoices | [docs/invoices.md](docs/invoices.md) | Hóa đơn (CRUD) |
-| 👥 Customers | [docs/customers.md](docs/customers.md) | Khách hàng (CRUD) |
-| 📦 Purchase Orders | [docs/purchase-orders.md](docs/purchase-orders.md) | Phiếu nhập hàng + Nhà cung cấp |
-| 🔔 Webhooks | [docs/webhooks.md](docs/webhooks.md) | Webhooks real-time events |
-| 🏪 Branches & Users | [docs/branches-users-misc.md](docs/branches-users-misc.md) | Chi nhánh, người dùng, ngân hàng, nhóm KH |
+| 🔐 2.1–2.2 Authentication | [docs/authentication.md](docs/authentication.md) | OAuth 2.0, lấy token, headers bắt buộc |
+| 🗂️ 2.3 Categories | [docs/categories.md](docs/categories.md) | Nhóm hàng hóa (CRUD) |
+| 🛍️ 2.4 Products | [docs/products.md](docs/products.md) | Hàng hóa, tồn kho, thuộc tính (CRUD + bulk) |
+| 📋 2.5 Orders | [docs/orders.md](docs/orders.md) | Đặt hàng (CRUD) |
+| 👥 2.6 Customers | [docs/customers.md](docs/customers.md) | Khách hàng (CRUD + bulk) |
+| 🏪 2.7–2.8 Branches & Users | [docs/branches.md](docs/branches.md) | Chi nhánh, người dùng |
+| 🏦 2.9 Bank Accounts | [docs/bank-accounts.md](docs/bank-accounts.md) | Tài khoản ngân hàng |
+| 💰 2.10 Surcharges | [docs/surcharges.md](docs/surcharges.md) | Thu khác / phụ thu (CRUD) |
+| 🔔 2.11 Webhooks | [docs/webhooks.md](docs/webhooks.md) | Webhooks + real-time events (12 event types) |
+| 🧾 2.12 Invoices | [docs/invoices.md](docs/invoices.md) | Hóa đơn (CRUD) |
+| 👤 2.13 Customer Groups | [docs/customer-groups.md](docs/customer-groups.md) | Nhóm khách hàng |
+| 📒 2.14 Cash Book | [docs/cash-book.md](docs/cash-book.md) | Sổ quỹ, thanh toán hóa đơn |
+| 📦 2.15 Purchase Orders | [docs/purchase-orders.md](docs/purchase-orders.md) | Phiếu nhập hàng (CRUD) |
+| 🚚 2.16 Transfers | [docs/transfers.md](docs/transfers.md) | Chuyển hàng giữa chi nhánh (CRUD) |
+| 💲 2.17 Price Books | [docs/price-books.md](docs/price-books.md) | Bảng giá (GET + UPDATE) |
+| 🛒 2.18 Sales Channels | [docs/sales-channels.md](docs/sales-channels.md) | Kênh bán hàng |
+| 🔄 2.19 Returns | [docs/returns.md](docs/returns.md) | Trả hàng (GET) |
+| 📥 2.20 Purchase Requisitions | [docs/purchase-requisitions.md](docs/purchase-requisitions.md) | Đặt hàng nhập (GET) |
+| 📍 2.21 Locations | [docs/locations.md](docs/locations.md) | Danh sách Location |
+| ⚙️ 2.22 Settings | [docs/settings.md](docs/settings.md) | Thiết lập cửa hàng |
+| 🎫 2.23 Coupons | [docs/coupons.md](docs/coupons.md) | Cập nhật trạng thái Coupon |
+| 🎟️ 2.24 Vouchers | [docs/vouchers.md](docs/vouchers.md) | Voucher (CRUD + phát hành + hủy) |
+| 🏷️ 2.25 Brands | [docs/brands.md](docs/brands.md) | Thương hiệu |
+| 🏭 2.26 Suppliers | [docs/suppliers.md](docs/suppliers.md) | Nhà cung cấp (GET) |
+| 📄 Overview | [docs/overview.md](docs/overview.md) | Giới thiệu tổng quan, danh mục |
 
 ---
 
@@ -85,26 +101,6 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 - **Product Types:** `1`=Combo, `2`=Standard, `3`=Service
 - **Tax IDs (khấu trừ):** `1`=VAT 0%, `2`=VAT 5%, `3`=VAT 8%, `4`=VAT 10%, `5`=KCT, `12`=KKKNT
 - **Tax IDs (trực tiếp):** `6`=VAT 1%, `7`=VAT 2%, `8`=VAT 3%, `9`=VAT 5%
-
----
-
-## Supported Features
-
-- ✅ Nhóm hàng hóa (Categories) — GET, POST, PUT, DELETE
-- ✅ Hàng hóa (Products) — GET, POST, PUT, DELETE, Bulk add/update
-- ✅ Tồn kho (Inventory) — GET
-- ✅ Đặt hàng (Orders) — GET, POST, PUT, DELETE
-- ✅ Hóa đơn (Invoices) — GET, POST, PUT, DELETE
-- ✅ Khách hàng (Customers) — GET, POST, PUT, DELETE
-- ✅ Phiếu nhập hàng (Purchase Orders) — GET
-- ✅ Nhà cung cấp (Suppliers) — GET
-- ✅ Chi nhánh (Branches) — GET
-- ✅ Người dùng (Users) — GET
-- ✅ Tài khoản ngân hàng (Bank Accounts) — GET
-- ✅ Nhóm khách hàng (Customer Groups) — GET
-- ✅ Sổ quỹ (Cash Book) — GET
-- ✅ Thu khác / Phụ thu (Surcharges) — GET
-- ✅ Webhooks — GET, POST, PUT, DELETE
 
 ---
 
