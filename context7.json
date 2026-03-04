@@ -1,0 +1,18 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "KiotViet Public API",
+  "description": "KiotViet Public API documentation - REST API để tích hợp với hệ thống POS KiotViet (bán lẻ, bán buôn). Hỗ trợ: hàng hóa, đơn hàng, hóa đơn, khách hàng, nhà cung cấp, kho hàng, webhooks.",
+  "folders": ["docs"],
+  "rules": [
+    "Sử dụng OAuth 2.0 để xác thực - cần ClientId và client_secret",
+    "Access token có thời hạn 86400 giây (24 giờ), cần refresh khi hết hạn",
+    "Header bắt buộc cho tất cả API (trừ lấy token): Retailer (tên gian hàng) và Authorization: Bearer {token}",
+    "GET APIs giới hạn 5000 request/giờ",
+    "Base URL cho tất cả API nghiệp vụ: https://public.kiotapi.com",
+    "Token endpoint: https://id.kiotviet.vn/connect/token",
+    "Pagination: dùng pageSize (tối đa 100) và currentItem để phân trang",
+    "DateTime format: ISO 8601 (ví dụ: 2024-01-01T10:00:00)",
+    "Tất cả response lỗi đều có trường message mô tả lỗi",
+    "productType: 1=combo, 2=thông thường, 3=dịch vụ"
+  ]
+}
