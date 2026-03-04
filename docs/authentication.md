@@ -1,81 +1,53 @@
-# Authentication — KiotViet Public API
+### **2.1. Authenticate**
 
-**Source:** https://www.kiotviet.vn/huong-dan-su-dung-kiotviet/retail-ket-noi-api/public-api/
+Kiotviet API xác thực dựa trên cơ chế xác thực OAuth 2.0, để kết nối được hệ thống cần có 2 thông tin: ClientId và Mã bảo mật. Thông tin này được truy cập vào “Thiết lập cửa hàng” bằng tài khoản admin => Chọn Thiết lập kết nối API
 
-## 2.1 — Tổng quan xác thực
+![](https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2021/07/PublicAPIRT_280721.png)
 
-KiotViet API xác thực dựa trên cơ chế **OAuth 2.0**. Để kết nối, cần có 2 thông tin:
-- `ClientId`
-- `client_secret` (Mã bảo mật)
+*Trong trường hợp không thể lấy được thông tin trên vui lòng liên hệ với bộ phận CSKH để được hỗ trợ.*
 
-Lấy thông tin từ: **Thiết lập cửa hàng** (tài khoản admin) → **Thiết lập kết nối API**
+– Sau khi có được thông tin ClientId và Mã bảo mật (client\_secret). Có thể sử dụng các thư viện theo từng ngôn ngữ để lấy thông tin Access Token, ví dụ:
 
-### Thư viện OAuth theo ngôn ngữ
+- Với C#: <https://www.nuget.org/packages/OAuth2Client/>
+- Với PHP: <https://github.com/thephpleague/oauth2-client>
 
-- **C#:** https://www.nuget.org/packages/OAuth2Client/
-- **PHP:** https://github.com/thephpleague/oauth2-client
+– Thông tin endpoint authenticate như sau:
 
-### Endpoints xác thực
+- Authorization Endpoint: <http://id.kiotviet.vn/connect/authorize>
+- ​Token Endpoint: <http://id.kiotviet.vn/connect/token>
 
-| Endpoint | URL |
-|---|---|
-| Authorization Endpoint | `http://id.kiotviet.vn/connect/authorize` |
-| Token Endpoint | `http://id.kiotviet.vn/connect/token` |
+– ​Hoặc có thể call API bên dưới **(2.2)**
 
----
+### **2.2. Lấy thông tin Access Token**
 
-## 2.2 — Lấy Access Token
+**– Mục đích sử dụng**: API lấy thông tin Access Token để truy cập
 
-**Phương thức:** `POST https://id.kiotviet.vn/connect/token`
+**– Phương thức và URL**: POST <https://id.kiotviet.vn/connect/token>
 
-### Request Headers
+**–** **Request:**
 
-```
-Content-Type: application/x-www-form-urlencoded
-```
+scopes: PublicApi.Access //Phạm vi truy cập (Public API)
 
-### Request Body
+grant\_type: client\_credentials //Thông tin truy cập dạng token
 
-```
-scopes=PublicApi.Access&grant_type=client_credentials&client_id={client_id}&client_secret={client_secret}
-```
+client\_id: 83a5bcbe-3c39-458c-bdd9-128112cef3f7 //Client Id
 
-| Tham số | Giá trị |
-|---|---|
-| `scopes` | `PublicApi.Access` |
-| `grant_type` | `client_credentials` |
-| `client_id` | ClientId của cửa hàng |
-| `client_secret` | Mã bảo mật của cửa hàng |
+client\_secret: 3B52F3A9DDE194966DAE2CE0A478B2DEC15254D6 //Client secret
 
-### Response
+**​- Header**
 
-```json
-{
-  "access_token": "eyJhbGciOiJSU0...",
-  "expires_in": 86400,
-  "token_type": "Bearer"
-}
-```
+“Content-Type”:”application/x-www-form-urlencoded”
 
-> **Lưu ý:** `expires_in` = 86400 giây (24 giờ). Cần refresh token khi hết hạn.
+scope
 
----
+**​- Body**
 
-## Header bắt buộc cho tất cả API (trừ lấy token)
+|  |
+| --- |
+| scopes=PublicApi.Access&grant\_type=client\_credentials&client\_id=e4fe37ab-5d10-4919-bf59-d9a568456d0b&client\_secret=01A3703244752CFF6350A801F900742179C7CCDA |
 
-```
-Retailer: {tên_gian_hàng}
-Authorization: Bearer {access_token}
-```
+**– Response:**
 
-**Ví dụ:**
-```
-Retailer: taphoaxyz
-Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVu...Z31gSjq6REOpMUj3hBYBojekzw
-```
-
----
-
-## Giới hạn tốc độ
-
-- **GET APIs:** Giới hạn **5000 request/giờ**
+|  |
+| --- |
+| {                      “access\_token”: “”,                      “expires\_in”: 86400,                      “token\_type”: “Bearer”  } |

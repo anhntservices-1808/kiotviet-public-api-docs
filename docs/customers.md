@@ -1,138 +1,144 @@
-# Customers (Khách hàng) — KiotViet Public API
+### **2.6. Khách hàng**
 
-**Base URL:** `https://public.kiotapi.com`
+– Mô tả chi tiết cho các thông tin liên quan đến khách hàng như sau:
 
-**Source:** https://www.kiotviet.vn/huong-dan-su-dung-kiotviet/retail-ket-noi-api/public-api/
+#### **2.6.1. Lấy danh sách khách hàng**
 
----
+– **Mục đích sử dụng**: Trả lại danh sách khách hàng theo cửa hàng đã được xác nhận
 
-## 2.6.1 — Lấy danh sách khách hàng
+**– Phương thức và URL: GET** <https://public.kiotapi.com/customers>
 
-**Phương thức:** `GET https://public.kiotapi.com/customers`
+**–** **Request:** Sử dụng hàm **GET** với tham số:
 
-### Request Parameters
+*“code”*: string, optional // nếu có mã code, cho phép tìm kiếm khách hàng theo mã khách hàng
+*“name”*: string, optional // tìm kiếm theo tên khách hàng
+*“contactNumber”*: string, optional // tìm kiếm theo số điện thoại khách hàng
+*“lastModifiedFrom”*: datetime? // thời gian cập nhật
+*“pageSize”*: int?, // số items trong 1 trang, mặc định 20 items, tối đa 100 items
+*“currentItem”*: int?,
+*“orderBy”*: string, //Sắp xếp dữ liệu theo trường orderBy (Ví dụ: orderBy=name)
+*“orderDirection”*: string, //Sắp xếp kết quả trả về theo: Tăng dần Asc (Mặc định), giảm dần Desc
+*“includeRemoveIds”*: boolean, //Có lấy thông tin danh sách Id bị xoá dựa trên lastModifiedFrom
+*“includeTotal”*: boolean, //Có lấy thông tin TotalInvoice, TotalPoint, TotalRevenue
+*“includeCustomerGroup”*: boolean, //Có lấy thông tin nhóm khách hàng hay không
+*“birthDate”*: string //filter khách hàng theo ngày sinh nhật
+*“groupId”*: int, //filter theo nhóm khách hàng
+*“includeCustomerSocial”*: boolean, // Có lấy thông tin Psid facebook fanpage của khách hàng hay không
 
-| Tham số | Kiểu | Mô tả |
-|---|---|---|
-| `code` | string | Mã khách hàng |
-| `name` | string | Tên khách hàng |
-| `contactNumber` | string | Số điện thoại |
-| `lastModifiedFrom` | datetime? | Thời gian cập nhật từ |
-| `pageSize` | int | Số items/trang, mặc định 20, tối đa 100 |
-| `currentItem` | int | Lấy từ bản ghi thứ N |
-| `orderBy` | string | Sắp xếp theo trường |
-| `orderDirection` | string | `Asc` (mặc định) hoặc `Desc` |
-| `includeRemoveIds` | bool | Có lấy ID bị xóa dựa trên lastModifiedFrom |
-| `customerGroupId` | int? | ID nhóm khách hàng |
-| `birthDate` | datetime? | Ngày sinh |
-| `includeCustomerGroup` | bool | Có lấy thông tin nhóm khách hàng |
-| `gender` | bool? | Giới tính |
+**– Response:**
 
-### Response
+|  |
+| --- |
+| {  “total”: int,  “pageSize”: int,  “data”: [  {  “id”: long, // ID khách hàng  “code”: string, // Mã khách hàng  “name”: string, // Tên khách hàng  “gender”: Boolean?, // Giới tính (true: nam, false: nữ)  “birthDate”: date?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “organization”: string, // Công ty  “comments”: string, // Ghi chú  “taxCode”: string, // Mã số thuế  “debt”: decimal, // Nợ hiện tại  “totalInvoiced”: decimal?, // Tổng bán  “totalPoint”: double?, // Tổng điểm  “totalRevenue”: decimal?,  “retailerId”: int, // Id cửa hàng  “modifiedDate”: datetime? // thời gian cập nhật  “createdDate”: datetime,  “rewardPoint”: long?// Điểm hiện tại  “psidFacebook”: long?// Psid facebook fanpage  }],  “removeId”: int [] // danh sách Id khách hàng bị xóa dựa trên ModifiedDate  } |
 
-```json
-{
-  "total": 100,
-  "pageSize": 20,
-  "data": [
-    {
-      "id": 500,
-      "code": "KH001",
-      "name": "Nguyễn Văn A",
-      "gender": true,
-      "birthDate": "1990-01-01T00:00:00",
-      "contactNumber": "0901234567",
-      "address": "123 Lê Lợi, TP.HCM",
-      "locationName": "TP.HCM - Quận 1",
-      "wardName": "Phường Bến Nghé",
-      "email": "nguyenvana@example.com",
-      "comment": "Khách VIP",
-      "retailerId": 100,
-      "groups": [
-        {
-          "id": 1,
-          "name": "Khách VIP"
-        }
-      ],
-      "debt": 0,
-      "totalInvoiced": 25000000,
-      "totalPoint": 100,
-      "totalRevenue": 25000000,
-      "modifiedDate": "2024-01-01T00:00:00",
-      "createdDate": "2023-01-01T00:00:00",
-      "type": 0,
-      "organization": null,
-      "taxCode": null,
-      "isActive": true
-    }
-  ],
-  "removeIds": []
-}
-```
+#### **2.6.2. Lấy chi tiết khách hàng**
 
----
+**– Mục đích sử dụng**: Trả lại thông tin chi tiết của khách hàng theo ID, theo Code
 
-## 2.6.2 — Lấy chi tiết khách hàng
+**– Phương thức và URL:**
 
-**Phương thức:**
-- Theo ID: `GET https://public.kiotapi.com/customers/{id}`
-- Theo Code: `GET https://public.kiotapi.com/customers/code/{code}`
+- Theo Id : **GET** [https://public.kiotapi.com/customers/{id}](https://public.kiotapi.com/customers/%7bid%7d)
+- Theo Code : **GET** [https://public.kiotapi.com/customers/code/{code}](https://public.kiotapi.com/customers/code/%7bcode%7d)
 
----
+**– Request:** Sử dụng hàm **GET** với tham số:
 
-## 2.6.3 — Tạo mới khách hàng
+***“id”***: long // ID của khách hàng
+***“code”***: string // Mã của khách hàng
 
-**Phương thức:** `POST https://public.kiotapi.com/customers`
+**– Response:**
 
-### Request Body
+|  |
+| --- |
+| {  “id”: long, // ID khách hàng  “code”: string, // Mã khách hàng  “name”: string, // Tên khách hàng  “gender”: Boolean?, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “organization”: string, // Công ty  “comments”: string, // Ghi chú  “taxCode”: string, // Mã số thuế  “retailerId”: int, // Id cửa hàng  “debt”: decimal, // Nợ hiện tại  “totalInvoiced”: decimal?, // Tổng bán  “totalPoint”: double?, // Tổng điểm  “totalRevenue”: decimal?,  “modifiedDate”: datetime? // thời gian cập nhật  “createdDate”: datetime  “groups”: string // danh sách tên nhóm khách hàng,  “rewardPoint”: long?// Điểm hiện tại  “psidFacebook”: long?// Psid facebook fanpage  } |
 
-```json
-{
-  "code": "KH001",
-  "name": "Nguyễn Văn A",
-  "gender": true,
-  "birthDate": "1990-01-01T00:00:00",
-  "contactNumber": "0901234567",
-  "address": "123 Lê Lợi",
-  "locationId": 1,
-  "wardId": 101,
-  "email": "nguyenvana@example.com",
-  "comment": "Khách VIP",
-  "debt": 0,
-  "organization": null,
-  "taxCode": null,
-  "groups": [
-    {
-      "id": 1
-    }
-  ]
-}
-```
+#### **2.6.3. Thêm mới khách hàng**
 
-### Response
+–**Mục đích sử dụng**: Tạo mới khách hàng
 
-Trả về object khách hàng vừa tạo.
+**– Phương thức và URL: POST** <https://public.kiotapi.com/customer>s
 
----
+**–** **Request:** JSON mã hóa yêu cầu gồm 1 object khách hàng:
 
-## 2.6.4 — Cập nhật khách hàng
+|  |
+| --- |
+| {  “code”: string, // Ma khach hang  “name”: string, // Tên khách hàng  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “subNumber”: string, // Số điện thoại khách hàng thứ hai  “IdentificationNumber”: string, // Số CCCD/CMND khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “comments”: string, // Ghi chú  “groupIds”: int[] // Danh sách Id nhóm khách hàng  “branchId”: int[] // ID chi nhánh tạo khách hàng  } |
 
-**Phương thức:** `PUT https://public.kiotapi.com/customers/{id}`
+**–  Response:**
 
-### Request Body
+|  |
+| --- |
+| {  “id”: long, // ID khách hàng (với id=-1 là bản ghi đầu tiên chứa thông tin tổng quan)  “code”: string, // Mã khách hàng  “name”: string, // Tên khách hàng  “type”: int, // Loại khách hàng ( 0 : Cá nhân, 1 : Công ty )  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “subNumber”: string, // Số điện thoại khách hàng thứ hai  “IdentificationNumber”: string, // Số CCCD/CMND khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “email”: string, // Email của khách hàng  “organization”: string, // Tên công ty của khách hàng (nếu là khách hàng công ty)  “comments”: string, // Ghi chú  “taxCode”: string, // Mã số thuế  “retailerId”: int, // Id cửa hàng  “modifiedDate”: datetime?, // Thời gian cập nhật  “createdDate”: datetime  “customerGroupDetails”: [  {  “id”: long // Id Chi tiết nhóm khách hàng  “customerId”: long // Id khách hàng  “groupId”: int // Id nhóm khách hàng  }  ],  } |
 
-Tương tự POST.
+#### **2.6.4. Cập nhật khách hàng**
 
----
+– **Mục đích sử dụng**: Cập nhật thông tin khách hàng theo ID
 
-## 2.6.5 — Xóa khách hàng
+**– Phương thức và URL: PUT** <https://public.kiotapi.com/customers/Id>
 
-**Phương thức:** `DELETE https://public.kiotapi.com/customers/{id}`
+**– Request:** Sử dụng hàm PUT với ID khách hàng qua 1 object JSON.
 
-### Response (200 OK)
+***“id”***: long // ID khách hàng
 
-```json
-{
-  "message": "Xóa dữ liệu thành công"
-}
-```
+**– Body**
+
+|  |
+| --- |
+| {  “code”: string, // Mã khách hàng  “name”: string, // Tên khách hàng  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “subNumber”: string, // Số điện thoại khách hàng thứ hai  “IdentificationNumber”: string, // Số CCCD/CMND khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “comments”: string, // Ghi chú  “groupIds”: int[] // Danh sách Id nhóm khách hàng  “taxCode”: string // Mã số thuế  } |
+
+**– Response:**
+
+|  |
+| --- |
+| {  “id”: long, // ID khách hàng (với id=-1 là bản ghi đầu tiên chứa thông tin tổng quan)  “code”: string, // Mã khách hàng  “name”: string, // Tên khách hàng  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “subNumber”: string, // Số điện thoại khách hàng thứ hai  “IdentificationNumber”: string, // Số CCCD/CMND khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “email”: string, // Email của khách hàng  “organization”: string, // Tên công ty của khách hàng (nếu là khách hàng công ty)  “comments”: string, // Ghi chú  “taxCode”: string, // Mã số thuế  “retailerId”: int, // Id cửa hàng  “modifiedDate”: datetime?, // Thời gian cập nhật  “createdDate”: datetime,  “groups”: string, // danh sách tên nhóm  } |
+
+#### **2.6.5. Xóa khách hàng**
+
+– **Mục đích sử dụng**: Xóa khách hàng theo ID
+
+**– Phương thức và URL: DELETE** [https://public.kiotapi.com/customers/{id}](https://public.kiotapi.com/customers/%7bid%7d)
+
+**–** **Request:** Gồm Id của khách hàng trong URL:
+
+***“id”***: long // ID của khách hàng
+
+**–** **Response:** Trả lại thông tin xóa thành công (Code 200)
+
+|  |
+| --- |
+| {  “message”: “Xóa dữ liệu thành công”  } |
+
+#### **2.6.6. Thêm mới danh sách khách hàng**
+
+–**Mục đích sử dụng**: Thêm mới danh sách khách hàng
+
+**– Phương thức và URL: POST** https://public.kiotapi.com/listaddcutomers
+
+**–** **Request:** JSON mã hóa yêu cầu gồm 1 danh sách object khách hàng riêng biệt với nhưng tham số sau:
+
+|  |
+| --- |
+| { “listCustomers”:[  {  “code”: string, // Ma khach hang  “name”: string, // Tên khách hàng  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “comments”: string, // Ghi chú  },  …]        } |
+
+**– Response:**
+
+|  |
+| --- |
+| {  “message”: “Thêm mới danh sách khách hàng thành công”  } |
+
+#### **2.6.7. Cập nhật danh sách khách hàng**
+
+– **Mục đích sử dụng**: Cập nhật danh sách khách hàng
+
+**– Phương thức và URL: PUT** https://public.kiotapi.com/listupdatecustomers
+
+**–** **Request:** JSON mã hóa yêu cầu gồm 1 danh sách object khách hàng riêng biệt với nhưng tham số sau:
+
+|  |
+| --- |
+| { “listCustomers”:[ // danh sách khách hàng  {  “id”: long, //Id khách hàng  “code”: string, // Ma khach hang  “name”: string, // Tên khách hàng  “gender”: Boolean, // Giới tính (true: nam, false: nữ)  “birthDate”: datetime?, // Ngày sinh khách hàng  “contactNumber”: string, // Số điện thoại khách hàng  “address”: string, // Địa chỉ khách hàng  “locationName”: string, // Khu vực  “wardName”: string, // Phường xã  “email”: string, // Email của khách hàng  “comments”: string, // Ghi chú  },  …]        } |
+
+**– Response:**
+
+|  |
+| --- |
+| {  “message”: “Cập nhật danh sách khách hàng thành công”  } |

@@ -1,195 +1,105 @@
-# Categories (Nhóm hàng hóa) — KiotViet Public API
+### **2.3. Nhóm hàng**
 
-**Base URL:** `https://public.kiotapi.com`
+Mô tả chi tiết cho các liên quan đến thông tin nhóm hàng hóa như sau:
 
-**Source:** https://www.kiotviet.vn/huong-dan-su-dung-kiotviet/retail-ket-noi-api/public-api/
+#### **2.3.1. Lấy danh sách nhóm hàng**
 
----
+**– Mục đích sử dụng**: Trả về toàn bộ danh mục hàng hóa (nhóm hàng hóa). Danh sách này được sắp xếp theo thứ tự bảng chữ cái (a-z). Hệ thống chỉ cho phép nhóm hàng hóa có tối đa 3 cấp, và không cho phép xóa nhóm hàng cha nếu đang có chứa nhóm hàng con và không cho phép xóa nhóm hàng con nếu đang được sử dụng.
 
-## 2.3.1 — Lấy danh sách nhóm hàng
+**– Phương thức và URL: GET** <https://public.kiotapi.com/categories>
 
-Trả về toàn bộ danh mục hàng hóa. Danh sách sắp xếp theo bảng chữ cái (a-z).
+**– Request:** Sử dụng hàm **GET** với tham số:
 
-- Tối đa 3 cấp nhóm hàng
-- Không xóa nhóm cha khi còn nhóm con
-- Không xóa nhóm con khi đang được sử dụng
+*“lastModifiedFrom”*: datetime? // thời gian cập nhật
+*“pageSize”*: int?, // số items trong 1 trang, mặc định 20 items, tối đa 100 items
+*“currentItem”*: int, // lấy dữ liệu từ bản ghi hiện tại, nếu không nhập thì mặc định là 0
+*“orderBy”*: string, //Sắp xếp dữ liệu theo trường orderBy (Ví dụ: orderBy=name)
+*“orderDirection”*: string, //Sắp xếp kết quả trả về theo: Tăng dần Asc (Mặc định), giảm dần Desc
+*“hierachicalData”*: Boolean, // nếu HierachicalData=true thì mình sẽ lấy nhóm hang theo cấp mà không quan tâm lastModifiedFrom. Ngược lại, HierachicalData=false thì sẽ lấy 1 list nhóm hang theo lastModifiedFrom nhưng không có phân cấp
 
-**Phương thức:** `GET https://public.kiotapi.com/categories`
+**– Response:**
 
-### Request Parameters
+- **Nếu *hierachicalData* là true**
 
-| Tham số | Kiểu | Mô tả |
-|---|---|---|
-| `lastModifiedFrom` | datetime? | Thời gian cập nhật |
-| `pageSize` | int? | Số items/trang, mặc định 20, tối đa 100 |
-| `currentItem` | int | Lấy từ bản ghi thứ N, mặc định 0 |
-| `orderBy` | string | Sắp xếp theo trường (Ví dụ: `name`) |
-| `orderDirection` | string | `Asc` (mặc định) hoặc `Desc` |
-| `hierachicalData` | Boolean | `true`: lấy theo cấp; `false`: list phẳng theo lastModifiedFrom |
+|  |
+| --- |
+| “total”: int,  “pageSize”: int,  “data”:  [  {  “categoryId”: int, // ID nhóm hàng hóa  “parentId”: int?, // Nếu danh mục có danh mục cha thì có id cụ thể, nếu không có danh mục cha, ParentId=null  “categoryName”: string, // Tên nhóm hàng hóa  “retailerId”: int, // Id cửa hàng  “hasChild”: boolean?, // nhóm hàng có con hay không “modifiedDate”: datetime? // thời gian cập nhật “createdDate”: datetime  “children”: []  }],  “removedIds”: int [], // danh sách ID nhóm hàng bị xóa dựa trên Modified Date  “timestamp”: datetime  } |
 
-### Response (khi `hierachicalData = true`)
+- **Nếu *hierachicalData* là fasle**
 
-```json
-{
-  "total": 10,
-  "pageSize": 20,
-  "data": [
-    {
-      "categoryId": 1,
-      "parentId": null,
-      "categoryName": "Điện thoại",
-      "retailerId": 100,
-      "hasChild": true,
-      "modifiedDate": "2024-01-01T00:00:00",
-      "createdDate": "2023-01-01T00:00:00",
-      "children": []
-    }
-  ],
-  "removedIds": [],
-  "timestamp": "2024-01-01T00:00:00"
-}
-```
+|  |
+| --- |
+| “total”: int,  “pageSize:” int,  “data”: [  {  “categoryId”: int, // ID nhóm hàng hóa  “parentId”: int?, // Nếu danh mục có danh mục cha thì có id cụ thể, nếu không có danh mục cha, ParentId=null  “categoryName”: string, // Tên nhóm hàng hóa  “retailerId”: int, // Id cửa hàng  “hasChild”: boolean?, // nhóm hàng có con hay không  “modifiedDate”: datetime? // thời gian cập nhật  “createdDate”: datetime  }],  “removedIds”: int [], // danh sách ID nhóm hàng bị xóa dựa trên Modified Date  “timestamp”: datetime  } |
 
-### Response (khi `hierachicalData = false`)
+#### **2.3.2. Lấy chi tiết nhóm hàng**
 
-```json
-{
-  "total": 10,
-  "pageSize": 20,
-  "data": [
-    {
-      "categoryId": 1,
-      "parentId": null,
-      "categoryName": "Điện thoại",
-      "retailerId": 100,
-      "hasChild": true,
-      "modifiedDate": "2024-01-01T00:00:00",
-      "createdDate": "2023-01-01T00:00:00"
-    }
-  ],
-  "removedIds": [],
-  "timestamp": "2024-01-01T00:00:00"
-}
-```
+**– Mục đich sử dụng:** Trả lại thông tin chi tiết của nhóm hàng hóa theo ID
 
----
+**– Phương thức và URL: GET** [https://public.kiotapi.com/categories/{id}](https://public.kiotapi.com/categories/%7bid%7d)
 
-## 2.3.2 — Lấy chi tiết nhóm hàng theo ID
+**– Request:** Sử dụng hàm **GET** với tham số:
+                 ***“id”***: long // ID của nhóm hàng
 
-**Phương thức:** `GET https://public.kiotapi.com/categories/{id}`
+**– Response:**
 
-### Request
+|  |
+| --- |
+| “data”: {                      “categoryId”: int, // ID nhóm hàng hóa                      “parentId”: int?, // Nếu danh mục có danh mục cha                      “categoryName”: string, // Tên nhóm hàng hóa                      “retailerId”: int, // ID cửa hàng                      “hasChild”: int?, // ID cửa hàng                       “modifiedDate: datetime?, // Thời gian cập nhật                       “createdDate”: datetime,                       “children”: []     } |
 
-| Tham số | Kiểu | Mô tả |
-|---|---|---|
-| `id` | long | ID của nhóm hàng (path param) |
+**2.3.3.Thêm mới nhóm hàng**
 
-### Response
+**–** **Mục đích sử dụng**: Thêm mới một nhóm hàng
 
-```json
-{
-  "data": {
-    "categoryId": 1,
-    "parentId": null,
-    "categoryName": "Điện thoại",
-    "retailerId": 100,
-    "hasChild": true,
-    "modifiedDate": "2024-01-01T00:00:00",
-    "createdDate": "2023-01-01T00:00:00",
-    "children": []
-  }
-}
-```
+**– Phương thức và URL: POST** <https://public.kiotapi.com/categories>
 
----
+**–** **Request:** JSON mã hóa yêu cầu gồm 1 object nhóm hàng riêng biệt với nhưng tham số sau:
+                     ***“categoryName”***: string // tên nhóm hàng hóa
+                     ***“parentId”***: int // nếu nhóm hàng có nhóm hàng cha (hệ thống cho phép tối đa 3 cấp nhóm)
+**–** **Body**
 
-## 2.3.3 — Tạo mới nhóm hàng
+|  |
+| --- |
+| {  “categoryName”: string   } |
 
-**Phương thức:** `POST https://public.kiotapi.com/categories`
+**– Response:**
 
-### Request Body
+|  |
+| --- |
+| {    “message”: “Cập nhật dữ liệu thành công”,    “data”: {                      “categoryId”: int, // ID nhóm hàng hóa                      “parentId”: int?, // Nếu danh mục có danh mục cha                      “categoryName”: string, // Tên nhóm hàng hóa (Tối đa 125 ký tự)                      “retailerId”: int, // ID cửa hàng                      “hasChild”: boolean?, // Có danh mục con                      “modifiedDate”: datetime?,                      “createdDate”: datetime,                      “children”: []                     }  } |
 
-```json
-{
-  "categoryName": "Tên nhóm hàng",
-  "parentId": 5
-}
-```
+#### **2.3.4. Cập nhật nhóm hàng**
 
-| Tham số | Kiểu | Mô tả |
-|---|---|---|
-| `categoryName` | string | Tên nhóm hàng hóa (bắt buộc) |
-| `parentId` | int | ID nhóm cha (nếu có, tối đa 3 cấp) |
+**–** **Mục đích sử dụng:** Cập nhật nhóm hàng hóa theo ID
 
-### Response
+**–** **Phương thức và URL:** **PUT** <https://public.kiotapi.com/categories/id>
 
-```json
-{
-  "message": "Cập nhật dữ liệu thành công",
-  "data": {
-    "categoryId": 10,
-    "parentId": 5,
-    "categoryName": "Tên nhóm hàng",
-    "retailerId": 100,
-    "hasChild": false,
-    "modifiedDate": "2024-01-01T00:00:00",
-    "createdDate": "2024-01-01T00:00:00",
-    "children": []
-  }
-}
-```
+**–** **Request:** Sử dụng hàm PUT với ID nhóm hàng qua 1 object JSON.
 
----
+      ***id”***: long // ID nhóm hàng hóa       
 
-## 2.3.4 — Cập nhật nhóm hàng
+**– Body**
 
-**Phương thức:** `PUT https://public.kiotapi.com/categories/{id}`
+|  |
+| --- |
+| {  “parentId”: int, // Nếu danh mục có danh mục cha  “categoryName”: string // Tên nhóm hàng hóa (tối đa 125 ký tự)  } |
 
-### Request
+**– Response:**
 
-Path: `id` (long) — ID nhóm hàng
+|  |
+| --- |
+| {    “message”: “Cập nhật dữ liệu thành công”,    “data”: {                      “categoryId”: int, // Id nhóm hàng hóa                      “parentId”: int, // Nếu danh mục có danh mục cha                      “categoryName”: string, // Tên nhóm hàng hóa (tối đa 125 ký tự)                      “retailerId”: int, // Id cửa hàng                      “hasChild”: false, // Có danh mục con                      “modifiedDate”: datetime,                      “createdDate”: datetime,                      “children”: []    }  } |
 
-### Request Body
+#### **2.3.5. Xóa nhóm hàng**
 
-```json
-{
-  "parentId": 5,
-  "categoryName": "Tên nhóm hàng mới"
-}
-```
+**– Mục đích sử dụng:** Xóa nhóm hàng theo ID
 
-### Response
+**–** **Phương thức và URL:** **DELETE** [https://public.kiotapi.com/categories/{id}](https://public.kiotapi.com/categories/%7bid%7d)
 
-```json
-{
-  "message": "Cập nhật dữ liệu thành công",
-  "data": {
-    "categoryId": 10,
-    "parentId": 5,
-    "categoryName": "Tên nhóm hàng mới",
-    "retailerId": 100,
-    "hasChild": false,
-    "modifiedDate": "2024-01-01T00:00:00",
-    "createdDate": "2023-01-01T00:00:00",
-    "children": []
-  }
-}
-```
+**– Request:** Request sẽ bao gồm Id của nhóm hàng trong URL:
+                  ***“id”***: long // ID của nhóm hàng
 
----
+**– Response:** Trả lại thông tin xóa thành công (Code 200)
 
-## 2.3.5 — Xóa nhóm hàng
-
-**Phương thức:** `DELETE https://public.kiotapi.com/categories/{id}`
-
-### Request
-
-Path: `id` (long) — ID nhóm hàng cần xóa
-
-### Response (200 OK)
-
-```json
-{
-  "message": "Xóa dữ liệu thành công"
-}
-```
+|  |
+| --- |
+| {  “message”: “Xóa dữ liệu thành công”  } |
